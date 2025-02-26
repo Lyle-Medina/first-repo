@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const tableBody = document.querySelector("#subjects-table");
     const searchInput = document.getElementById("searchInput");
-    const jsonUrl = "https://lyle-medina.github.io/first-repo/courses.json"; // Update this URL if needed
+    const jsonUrl = "https://lyle-medina.github.io/first-repo/courses.json"; // Update if needed
 
     if (!tableBody) {
         console.error("Error: Table body not found!");
@@ -40,14 +40,24 @@ document.addEventListener("DOMContentLoaded", function () {
             tableBody.appendChild(row);
         });
 
-        // Enable search functionality
+        // Enable search functionality for all columns
         searchInput.addEventListener("input", function () {
             const searchTerm = searchInput.value.toLowerCase();
             const rows = tableBody.getElementsByTagName("tr");
 
             for (let row of rows) {
-                const description = row.cells[3].textContent.toLowerCase();
-                row.style.display = description.includes(searchTerm) ? "" : "none";
+                let matchFound = false;
+
+                // Loop through all columns in the row
+                for (let i = 0; i < row.cells.length; i++) {
+                    if (row.cells[i].textContent.toLowerCase().includes(searchTerm)) {
+                        matchFound = true;
+                        break; // Stop checking if a match is found
+                    }
+                }
+
+                // Show or hide row based on search match
+                row.style.display = matchFound ? "" : "none";
             }
         });
     }
